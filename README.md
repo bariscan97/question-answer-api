@@ -1,7 +1,4 @@
 # question-answer-rest-api
-Question &amp; Answer Rest Api - ExpressJS, MongoDb, Javascript
-
-# question-answer-rest-api
 Question - Answer Rest Api - ExpressJs - MongoDB
 
 # Getting started
