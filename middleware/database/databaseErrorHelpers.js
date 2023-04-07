@@ -1,0 +1,52 @@
+const User = require("../../models/User");
+const Question = require("../../models/Question");
+const asyncHandler = require("express-async-handler");
+const Answer = require("../../models/Answer");
+const CustomError = require("../../helpers/error/CustomError");
+
+const checkUserExist = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    res.status(400).json({
+      success: false,
+      message: "There is no such user with that id",
+    });
+  }
+  next();
+});
+const checkQuestionExist = asyncHandler(async (req, res, next) => {
+  const question_id = req.params.id || req.params.question_id;
+
+  const question = await Question.findById(question_id);
+
+  if (!question) {
+    res.status(400).json({
+      success: false,
+      message: "There is no such question with that id",
+    });
+  }
+  next();
+});
+const checkQuestionAndAnswerExist = asyncHandler(async (req, res, next) => {
+  const question_id = req.params.id || req.params.question_id;
+  const answer_id = req.params.answer_id;
+
+  const answer = await Answer.findOne({
+    _id: answer_id,
+    question: question_id,
+  });
+  const question = await Question.findById(question_id);
+
+  if (!answer) {
+    return next(new CustomError("There is no answer with that id", 400));
+  }
+  next();
+});
+module.exports = {
+  checkUserExist,
+  checkQuestionExist,
+  checkQuestionAndAnswerExist,
+};
